@@ -1,0 +1,21 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t hth/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true hth/react-test npm run test
+
+after_success:
+  - docker build -t sbht/multi-client ./client
+  - docker build -t sbht/multi-nginx ./nginx
+  - docker build -t sbht/multi-server ./server
+  - docker build -t sbht/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push sbht/multi-client
+  - docker push sbht/multi-nginx
+  - docker push sbht/multi-server
+  - docker push sbht/multi-worker
