@@ -10,12 +10,12 @@ script:
   - docker run -e CI=true hth/react-test npm run test
 
 after_success:
-  - docker build -t sbht/multi-client ./client
-  - docker build -t sbht/multi-nginx ./nginx
-  - docker build -t sbht/multi-server ./server
-  - docker build -t sbht/multi-worker ./worker
+  - docker build -t "$DOCKER_ID"/multi-client ./client
+  - docker build -t "$DOCKER_ID"/multi-nginx ./nginx
+  - docker build -t "$DOCKER_ID"/multi-server ./server
+  - docker build -t "$DOCKER_ID"/multi-worker ./worker
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push sbht/multi-client
-  - docker push sbht/multi-nginx
-  - docker push sbht/multi-server
-  - docker push sbht/multi-worker
+  - docker push "$DOCKER_ID"/multi-client
+  - docker push "$DOCKER_ID"/multi-nginx
+  - docker push "$DOCKER_ID"/multi-server
+  - docker push "$DOCKER_ID"/multi-worker
